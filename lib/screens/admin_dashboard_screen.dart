@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:samacaisse/screens/product_list_screen.dart';
 import 'user_list_screen.dart';
 //import 'product_list_screen.dart';
 import 'login_screen.dart';
@@ -66,10 +67,19 @@ class AdminDashboardScreen extends StatelessWidget {
                 icon: const Icon(Icons.inventory),
                 label: const Text("Gestion des produits"),
                 onPressed: () {
-                  //Navigator.push(
-                    //context,
-                    //MaterialPageRoute(builder: (_) => const ProductListScreen()),
-                  //);
+                  final loginTime = DateTime.now().toIso8601String();
+                  final updatedUser = UserModel(
+                    id: user.id,
+                    username: user.username,
+                    password: user.password,
+                    role: user.role,
+                    lastLogin: loginTime,
+                    lastLogout: user.lastLogout,
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ProductListScreen(user: updatedUser, user1: user,)),
+                  );
                 },
               ),
             ],

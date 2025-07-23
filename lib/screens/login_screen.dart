@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:samacaisse/screens/product_list_screen.dart';
 import '../db/user_db_helper.dart';
 import '../models/user_model.dart';
 import 'admin_dashboard_screen.dart';
+import 'cashier_screen.dart';
 import 'user_list_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -57,7 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await db.updateUser(updatedUser);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => AdminDashboardScreen(user: updatedUser,)),
+          MaterialPageRoute(builder: (_) =>  CashierScreen(user: user,))
+          //MaterialPageRoute(builder: (_) => ProductListScreen(user: updatedUser, user1: user,)),
         );
       }
     } else {

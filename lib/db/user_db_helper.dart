@@ -29,10 +29,20 @@ class UserDBHelper {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await db.execute("ALTER TABLE users ADD COLUMN last_login TEXT");
-      await db.execute("ALTER TABLE users ADD COLUMN last_logout TEXT");
+      try {
+        await db.execute("ALTER TABLE users ADD COLUMN last_login TEXT");
+      } catch (e) {
+        print("Colonne 'last_login' existe déjà : $e");
+      }
+
+      try {
+        await db.execute("ALTER TABLE users ADD COLUMN last_logout TEXT");
+      } catch (e) {
+        print("Colonne 'last_logout' existe déjà : $e");
+      }
     }
   }
+
 
 
 
