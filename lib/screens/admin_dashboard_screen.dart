@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:samacaisse/screens/product_list_screen.dart';
+import 'historique_ventes_screen.dart';
 import 'user_list_screen.dart';
 //import 'product_list_screen.dart';
 import 'login_screen.dart';
@@ -82,6 +83,17 @@ class AdminDashboardScreen extends StatelessWidget {
                   );
                 },
               ),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.history),
+                label: const Text("Historique des ventes"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HistoriqueVentesScreen()),
+                  );
+                },
+              ),
+
             ],
           ),
         ),
