@@ -18,6 +18,8 @@ class CashierScreen extends StatefulWidget {
 
 class _CashierScreenState extends State<CashierScreen> {
   final db = ProductDatabaseHelper();
+
+
   String searchText = '';
   List<ProductModel> products = [];
   Map<int, int> panier = {}; // productId -> quantity
@@ -26,6 +28,77 @@ class _CashierScreenState extends State<CashierScreen> {
   void initState() {
     super.initState();
     loadProducts();
+  }
+
+  Widget _buildSearchField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        decoration: const InputDecoration(
+          labelText: "Rechercher un produit",
+          prefixIcon: Icon(Icons.search),
+          border: OutlineInputBorder(),
+        ),
+        onChanged: (value) {
+          setState(() => searchText = value.toLowerCase());
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductList() {
+    final filteredProducts = products
+        .where((p) => p.name.toLowerCase().contains(searchText))
+        .toList();
+
+    return Expanded(
+      child: ListView.builder(
+        itemCount: filteredProducts.length,
+        itemBuilder: (_, index) {
+          final p = filteredProducts[index];
+          return ListTile(
+            title: Text(p.name),
+            subtitle: Text("Prix: ${p.price.toStringAsFixed(2)} FCFA • Stock: ${p.quantity}"),
+            trailing: ElevatedButton(
+              child: const Text("Ajouter"),
+              onPressed: () => addToCart(p),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCartSummary() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Total : ${total.toStringAsFixed(2)} FCFA", style: const TextStyle(fontSize: 20)),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.check),
+            label: const Text("Valider"),
+            onPressed: panier.isNotEmpty ? validerVente : null,
+          ),
+          const SizedBox(height: 20),
+          const Text("Produits ajoutés :", style: TextStyle(fontWeight: FontWeight.bold)),
+          Expanded(
+            child: ListView(
+              children: panier.entries.map((entry) {
+                final product = products.firstWhere((p) => p.id == entry.key);
+                final qty = entry.value;
+                return ListTile(
+                  title: Text("${product.name} (x$qty)"),
+                  trailing: Text("${(product.price * qty).toStringAsFixed(2)} FCFA"),
+                );
+              }).toList(),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Future<void> loadProducts() async {
@@ -156,6 +229,7 @@ class _CashierScreenState extends State<CashierScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isTablet = MediaQuery.of(context).size.width > 600;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Caisse"),
@@ -172,67 +246,38 @@ class _CashierScreenState extends State<CashierScreen> {
           )
         ],
       ),
-      body: Column(
+      body: isTablet
+          ? Row(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8),
-            child: Text("Produits disponibles", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: "Rechercher un produit",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                setState(() => searchText = value.toLowerCase());
-              },
-            ),
-          ),
-
           Expanded(
-            child: Builder(
-              builder: (context) {
-                final filteredProducts = products.where((p) =>
-                    p.name.toLowerCase().contains(searchText)).toList();
-
-                return ListView.builder(
-                  itemCount: filteredProducts.length,
-                  itemBuilder: (_, index) {
-                    final p = filteredProducts[index];
-                    return ListTile(
-                      title: Text(p.name),
-                      subtitle: Text("Prix: ${p.price.toStringAsFixed(2)} FCFA • Stock: ${p.quantity}"),
-                      trailing: ElevatedButton(
-                        child: const Text("Ajouter"),
-                        onPressed: () => addToCart(p),
-                      ),
-                    );
-                  },
-                );
-              },
+            flex: 2,
+            child: Column(
+              children: [
+                _buildSearchField(),
+                _buildProductList(),
+              ],
             ),
           ),
+          const VerticalDivider(width: 1),
+          Expanded(
+            flex: 1,
+            child: _buildCartSummary(), // 👈 total + valider
+          ),
+        ],
+      )
+          : Column(
+        children: [
+          _buildSearchField(),
+          Expanded(child: _buildProductList()),
           const Divider(),
-    Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-    Text("Total : ${total.toStringAsFixed(2)} FCFA", style: const TextStyle(fontSize: 20)),
-    ElevatedButton.icon(
-    icon: const Icon(Icons.check),
-    label: const Text("Valider"),
-    onPressed: panier.isNotEmpty ? validerVente : null,
-    ),
-    ],
-    ),
-    ),
-
+          _buildCartSummary(),
         ],
       ),
+
+
     );
   }
 }
+
+
+

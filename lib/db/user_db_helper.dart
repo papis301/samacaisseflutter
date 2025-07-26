@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/user_model.dart';
@@ -44,7 +47,16 @@ class UserDBHelper {
   }
 
 
+  Future<void> exportDatabaseToDownloads() async {
+    final dbPath = await getDatabasesPath();
+    final dbFile = File('$dbPath/users.db');
 
+    final downloads = await getExternalStorageDirectory(); // peut être "Documents" ou "Downloads"
+    final newPath = '${downloads!.path}/copie_users.db';
+
+    await dbFile.copy(newPath);
+    print("Base copiée ici : $newPath");
+  }
 
 
   Future<void> _onCreate(Database db, int version) async {
@@ -53,7 +65,9 @@ class UserDBHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE,
         password TEXT,
-        role TEXT
+        role TEXT,
+        last_login TEXT,
+        last_logout TEXT
       )
     ''');
   }

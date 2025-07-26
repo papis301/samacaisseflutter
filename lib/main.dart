@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:samacaisse/screens/initial_screen.dart';
 import 'package:samacaisse/screens/login_screen.dart';
 
 import 'db/user_db_helper.dart';
 
-void main() async {
+
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final db = UserDBHelper();     // Crée une instance
-  await db.seedAdminUser();      // Appelle le seed admin
-
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Gestion Utilisateurs',
-        theme: ThemeData(primarySwatch: Colors.blue),
-        //home: const UserListScreen(),
-        home: LoginScreen()
+      title: 'Flutter POS',
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/login': (_) => const LoginScreen(),
+        // autres routes...
+      },
+      home: const InitialScreen(), // 👈 point d'entrée conditionnel
     );
   }
 }
