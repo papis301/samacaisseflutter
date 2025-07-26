@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:samacaisse/screens/product_list_screen.dart';
+import 'clients_screen.dart';
 import 'historique_ventes_screen.dart';
 import 'user_list_screen.dart';
 //import 'product_list_screen.dart';
@@ -92,6 +93,15 @@ class AdminDashboardScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const HistoriqueVentesScreen()),
                   );
                 },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ClientListScreen()),
+                  );
+                },
+                child: const Text("Gérer les clients"),
               ),
 
             ],

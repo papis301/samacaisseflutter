@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import '../models/client_model.dart';
 import '../models/user_model.dart';
 
 class UserDBHelper {
@@ -70,6 +71,15 @@ class UserDBHelper {
         last_logout TEXT
       )
     ''');
+
+    // Table des clients
+        await db.execute('''
+        CREATE TABLE clients (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          phone TEXT
+        )
+      ''');
   }
 
   Future<int> insertUser(UserModel user) async {
@@ -104,5 +114,27 @@ class UserDBHelper {
       });
     }
   }
+
+  Future<int> insertClient(ClientModel client) async {
+    final db = await database;
+    return await db.insert('clients', client.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<List<ClientModel>> getAllClients() async {
+    final db = await database;
+    final res = await db.query('clients');
+    return res.map((e) => ClientModel.fromMap(e)).toList();
+  }
+
+  Future<int> updateClient(ClientModel client) async {
+    final db = await database;
+    return await db.update('clients', client.toMap(), where: 'id = ?', whereArgs: [client.id]);
+  }
+
+  Future<int> deleteClient(int id) async {
+    final db = await database;
+    return await db.delete('clients', where: 'id = ?', whereArgs: [id]);
+  }
+
 
 }
