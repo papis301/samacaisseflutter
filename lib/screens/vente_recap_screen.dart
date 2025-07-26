@@ -48,6 +48,7 @@ class VenteRecapScreen extends StatelessWidget {
             ),
             const Divider(),
             Text("TOTAL : ${total.toStringAsFixed(2)} FCFA", style: const TextStyle(fontSize: 20)),
+
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton.icon(

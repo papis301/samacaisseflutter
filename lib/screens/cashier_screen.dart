@@ -70,33 +70,73 @@ class _CashierScreenState extends State<CashierScreen> {
   }
 
   Widget _buildCartSummary() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Total : ${total.toStringAsFixed(2)} FCFA", style: const TextStyle(fontSize: 20)),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.check),
-            label: const Text("Valider"),
-            onPressed: panier.isNotEmpty ? validerVente : null,
-          ),
-          const SizedBox(height: 20),
-          const Text("Produits ajoutés :", style: TextStyle(fontWeight: FontWeight.bold)),
-          Expanded(
-            child: ListView(
-              children: panier.entries.map((entry) {
-                final product = products.firstWhere((p) => p.id == entry.key);
-                final qty = entry.value;
-                return ListTile(
-                  title: Text("${product.name} (x$qty)"),
-                  trailing: Text("${(product.price * qty).toStringAsFixed(2)} FCFA"),
-                );
-              }).toList(),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Total : ${total.toStringAsFixed(2)} FCFA", style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.check),
+              label: const Text("Valider"),
+              onPressed: panier.isNotEmpty ? validerVente : null,
             ),
-          )
-        ],
+            const SizedBox(height: 20),
+            const Text("Produits ajoutés :", style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                children: panier.entries.map((entry) {
+                  final product = products.firstWhere((p) => p.id == entry.key);
+                  final qty = entry.value;
+                  final controller = TextEditingController(text: qty.toString());
+
+                  return ListTile(
+                    title: Text(product.name),
+                    subtitle: Text("Prix unitaire : ${product.price.toStringAsFixed(2)} FCFA"),
+                    trailing: SizedBox(
+                      width: 150,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: controller,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                hintText: "Qté",
+                                border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              ),
+                              onSubmitted: (val) {
+                                final newQty = int.tryParse(val) ?? qty;
+                                setState(() {
+                                  if (newQty <= 0) {
+                                    panier.remove(product.id);
+                                  } else {
+                                    panier[product.id!] = newQty;
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () {
+                              setState(() => panier.remove(product.id));
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -114,6 +154,7 @@ class _CashierScreenState extends State<CashierScreen> {
   void validerVente() async {
     bool success = true;
     List<Map<String, dynamic>> venteItems = [];
+    final double totalVente = total;
 
     for (var entry in panier.entries) {
       final productId = entry.key;
@@ -131,6 +172,7 @@ class _CashierScreenState extends State<CashierScreen> {
 
       // Stocker les items vendus pour la fiche
       venteItems.add({'product': product, 'qty': quantityVendue});
+
 
       // Mise à jour du stock
       final updatedProduct = ProductModel(
@@ -160,7 +202,7 @@ class _CashierScreenState extends State<CashierScreen> {
           builder: (_) => VenteRecapScreen(
             user: widget.user,
             venteItems: venteItems,
-            total: total,
+            total: totalVente,
             date: now,
           ),
         ),
