@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:samacaisse/screens/vente_recap_screen.dart';
 import '../db/sales_db_helper.dart';
 import '../db/user_db_helper.dart';
+import '../models/client_model.dart';
 import '../models/product_model.dart';
 import '../db/product_db_helper.dart';
 import '../models/user_model.dart';
 
 class CashierScreen extends StatefulWidget {
   final UserModel user;
-
 
   const CashierScreen({super.key, required this.user});
 
@@ -19,15 +19,26 @@ class CashierScreen extends StatefulWidget {
 class _CashierScreenState extends State<CashierScreen> {
   final db = ProductDatabaseHelper();
 
-
   String searchText = '';
+  String? selectedClientId;
   List<ProductModel> products = [];
   Map<int, int> panier = {}; // productId -> quantity
+  ClientModel? selectedClient;
+  List<ClientModel> clients = [];
+
+  Future<void> loadClients() async {
+    final db = UserDBHelper();
+    final result = await db.getAllClients();
+    setState(() {
+      clients = result;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     loadProducts();
+    loadClients();
   }
 
   Widget _buildSearchField() {
@@ -83,6 +94,47 @@ class _CashierScreenState extends State<CashierScreen> {
               label: const Text("Valider"),
               onPressed: panier.isNotEmpty ? validerVente : null,
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Flexible(
+                child: DropdownButtonFormField<ClientModel?>(
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                    labelText: "Choisir un client",
+                    border: OutlineInputBorder(),
+                  ),
+                  value: selectedClient,
+                  items: [
+                    const DropdownMenuItem<ClientModel?>(
+                      value: null,
+                      child: Text("Aucun client"),
+                    ),
+                    ...clients.map((client) {
+                      return DropdownMenuItem<ClientModel?>(
+                        value: client,
+                        child: Text("${client.name} (${client.phone})"),
+                      );
+                    }).toList(),
+                  ],
+                  onChanged: (ClientModel? newValue) {
+                    setState(() {
+                      selectedClient = newValue;
+                    });
+                  },
+                ),
+              ),
+
+            ),
+            if (selectedClient == null)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text("Aucun client sélectionné", style: TextStyle(color: Colors.grey)),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text("Client sélectionné : \${selectedClient!.name}", style: const TextStyle(fontWeight: FontWeight.w500)),
+              ),
             const SizedBox(height: 20),
             const Text("Produits ajoutés :", style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
@@ -165,16 +217,13 @@ class _CashierScreenState extends State<CashierScreen> {
       if (product.quantity < quantityVendue) {
         success = false;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Stock insuffisant pour ${product.name}")),
+          SnackBar(content: Text("Stock insuffisant pour \${product.name}")),
         );
         break;
       }
 
-      // Stocker les items vendus pour la fiche
       venteItems.add({'product': product, 'qty': quantityVendue});
 
-
-      // Mise à jour du stock
       final updatedProduct = ProductModel(
         id: product.id,
         name: product.name,
@@ -191,11 +240,12 @@ class _CashierScreenState extends State<CashierScreen> {
       final saleDB = SalesDatabaseHelper();
       await saleDB.insertSale(
         user: widget.user.username,
+        clientName: selectedClient?.name,
         total: total,
         date: now.toIso8601String(),
         items: venteItems,
       );
-      // Aller vers l’écran de fiche de vente
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -204,6 +254,7 @@ class _CashierScreenState extends State<CashierScreen> {
             venteItems: venteItems,
             total: totalVente,
             date: now,
+            clientName: selectedClient?.name ?? '',
           ),
         ),
       );
@@ -215,15 +266,13 @@ class _CashierScreenState extends State<CashierScreen> {
     }
   }
 
-
-
   void addToCart(ProductModel product) async {
     final controller = TextEditingController(text: "1");
 
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Ajouter ${product.name}"),
+        title: Text("Ajouter \${product.name}"),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(labelText: "Quantité"),
@@ -265,9 +314,8 @@ class _CashierScreenState extends State<CashierScreen> {
     final userDb = UserDBHelper();
     await userDb.updateUser(updatedUser);
 
-    Navigator.pushReplacementNamed(context, '/login'); // ou LoginScreen()
+    Navigator.pushReplacementNamed(context, '/login');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +351,7 @@ class _CashierScreenState extends State<CashierScreen> {
           const VerticalDivider(width: 1),
           Expanded(
             flex: 1,
-            child: _buildCartSummary(), // 👈 total + valider
+            child: _buildCartSummary(),
           ),
         ],
       )
@@ -315,11 +363,6 @@ class _CashierScreenState extends State<CashierScreen> {
           _buildCartSummary(),
         ],
       ),
-
-
     );
   }
 }
-
-
-

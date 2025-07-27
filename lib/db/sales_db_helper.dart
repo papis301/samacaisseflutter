@@ -11,7 +11,7 @@ class SalesDatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    final path = join(await getDatabasesPath(), 'sales.db');
+    final path = join(await getDatabasesPath(), 'sale.db');
 
     _database = await openDatabase(
       path,
@@ -21,6 +21,7 @@ class SalesDatabaseHelper {
           CREATE TABLE sales (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user TEXT,
+            client_name TEXT, -- nullable
             total REAL,
             date TEXT
           )
@@ -43,6 +44,7 @@ class SalesDatabaseHelper {
 
   Future<int> insertSale({
     required String user,
+    String? clientName,
     required double total,
     required String date,
     required List<Map<String, dynamic>> items,
@@ -51,6 +53,7 @@ class SalesDatabaseHelper {
 
     final saleId = await db.insert('sales', {
       'user': user,
+      'client_name': clientName,
       'total': total,
       'date': date,
     });

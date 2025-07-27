@@ -7,6 +7,7 @@ class VenteRecapScreen extends StatelessWidget {
   final List<Map<String, dynamic>> venteItems; // contient product + qty
   final double total;
   final DateTime date;
+  final String? clientName;
 
   const VenteRecapScreen({
     super.key,
@@ -14,6 +15,7 @@ class VenteRecapScreen extends StatelessWidget {
     required this.venteItems,
     required this.total,
     required this.date,
+    this.clientName,
   });
 
   @override
@@ -27,6 +29,10 @@ class VenteRecapScreen extends StatelessWidget {
           children: [
             Text("Employé : ${user.username}", style: const TextStyle(fontSize: 18)),
             Text("Date : ${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}"),
+            const SizedBox(height: 20),
+            if (clientName != null && clientName!.isNotEmpty)
+              Text("Client : $clientName", style: const TextStyle(fontSize: 16)),
+
             const SizedBox(height: 20),
             const Text("Produits vendus :", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
