@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:samacaisse/screens/product_list_screen.dart';
-import '../db/user_db_helper.dart';
+import '../db/app_db_helper.dart';
 import '../models/user_model.dart';
 import 'admin_dashboard_screen.dart';
 import 'cashier_screen.dart';
@@ -16,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final db = UserDBHelper();
+  final db = AppDatabaseHelper();
   bool showError = false;
 
   void login() async {

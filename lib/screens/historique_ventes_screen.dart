@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../db/sales_db_helper.dart';
+import '../db/app_db_helper.dart';
 
 class HistoriqueVentesScreen extends StatefulWidget {
   const HistoriqueVentesScreen({super.key});
@@ -9,7 +9,7 @@ class HistoriqueVentesScreen extends StatefulWidget {
 }
 
 class _HistoriqueVentesScreenState extends State<HistoriqueVentesScreen> {
-  final db = SalesDatabaseHelper();
+  final db = AppDatabaseHelper();
   List<Map<String, dynamic>> ventes = [];
 
   @override

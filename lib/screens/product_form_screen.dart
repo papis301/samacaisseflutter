@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../db/product_db_helper.dart';
+import '../db/app_db_helper.dart';
 import '../models/product_model.dart';
 
 class ProductFormScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final nameController = TextEditingController();
   final quantityController = TextEditingController();
   final priceController = TextEditingController();
-  final db = ProductDatabaseHelper();
+  final db = AppDatabaseHelper();
 
   @override
   void initState() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../db/user_db_helper.dart';
+import '../db/app_db_helper.dart';
 import '../models/user_model.dart';
 import 'login_screen.dart';
 
@@ -13,7 +13,7 @@ class CreateAdminScreen extends StatefulWidget {
 class _CreateAdminScreenState extends State<CreateAdminScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final db = UserDBHelper();
+  final db = AppDatabaseHelper();
 
   void createAdmin() async {
     final username = usernameController.text.trim();

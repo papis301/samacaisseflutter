@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:samacaisse/screens/product_list_screen.dart';
+import '../db/app_db_helper.dart';
 import 'clients_screen.dart';
 import 'historique_ventes_screen.dart';
 import 'user_list_screen.dart';
 //import 'product_list_screen.dart';
 import 'login_screen.dart';
 import '../models/user_model.dart';
-import '../db/user_db_helper.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   final UserModel user; // ✅ utilisateur connecté
@@ -15,7 +15,7 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final db = UserDBHelper();
+    final db = AppDatabaseHelper();
 
     void logout() async {
       final logoutTime = DateTime.now().toIso8601String();

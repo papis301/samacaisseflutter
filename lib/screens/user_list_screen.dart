@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../db/user_db_helper.dart';
+import '../db/app_db_helper.dart';
 import '../models/user_model.dart';
 import 'user_form_screen.dart';
 
@@ -11,7 +11,7 @@ class UserListScreen extends StatefulWidget {
 
 class _UserListScreenState extends State<UserListScreen> {
   List<UserModel> users = [];
-  final userDb = UserDBHelper();
+  final userDb = AppDatabaseHelper();
 
   void loadUsers() async {
     final data = await userDb.getAllUsers();

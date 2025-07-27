@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:samacaisse/models/user_model.dart';
-import '../db/product_db_helper.dart';
+import '../db/app_db_helper.dart';
 import '../models/product_model.dart';
 import 'product_form_screen.dart';
 
@@ -14,7 +14,7 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   List<ProductModel> products = [];
-  final db = ProductDatabaseHelper();
+  final db = AppDatabaseHelper();
 
   @override
   void initState() {

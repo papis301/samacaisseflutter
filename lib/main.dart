@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:samacaisse/screens/initial_screen.dart';
 import 'package:samacaisse/screens/login_screen.dart';
 
-import 'db/user_db_helper.dart';
 
 
 void main() {

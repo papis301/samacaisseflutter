@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../db/app_db_helper.dart';
 import '../models/user_model.dart';
-import '../db/user_db_helper.dart';
 
 class UserFormScreen extends StatefulWidget {
   final UserModel? user;
@@ -14,7 +14,7 @@ class _UserFormScreenState extends State<UserFormScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   String role = "employe";
-  final db = UserDBHelper();
+  final db = AppDatabaseHelper();
 
   @override
   void initState() {

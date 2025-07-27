@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../db/app_db_helper.dart';
 import '../models/client_model.dart';
-import '../db/user_db_helper.dart';
 
 class ClientListScreen extends StatefulWidget {
   const ClientListScreen({super.key});
@@ -10,7 +10,7 @@ class ClientListScreen extends StatefulWidget {
 }
 
 class _ClientListScreenState extends State<ClientListScreen> {
-  final db = UserDBHelper();
+  final db = AppDatabaseHelper();
   List<ClientModel> clients = [];
 
   @override

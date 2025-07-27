@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:samacaisse/screens/vente_recap_screen.dart';
-import '../db/sales_db_helper.dart';
-import '../db/user_db_helper.dart';
+import '../db/app_db_helper.dart';
 import '../models/client_model.dart';
 import '../models/product_model.dart';
-import '../db/product_db_helper.dart';
 import '../models/user_model.dart';
 
 class CashierScreen extends StatefulWidget {
@@ -17,7 +15,7 @@ class CashierScreen extends StatefulWidget {
 }
 
 class _CashierScreenState extends State<CashierScreen> {
-  final db = ProductDatabaseHelper();
+  final db = AppDatabaseHelper();
 
   String searchText = '';
   String? selectedClientId;
@@ -27,7 +25,7 @@ class _CashierScreenState extends State<CashierScreen> {
   List<ClientModel> clients = [];
 
   Future<void> loadClients() async {
-    final db = UserDBHelper();
+    final db = AppDatabaseHelper();
     final result = await db.getAllClients();
     setState(() {
       clients = result;
@@ -237,7 +235,7 @@ class _CashierScreenState extends State<CashierScreen> {
     if (success) {
       final now = DateTime.now();
 
-      final saleDB = SalesDatabaseHelper();
+      final saleDB = AppDatabaseHelper();
       await saleDB.insertSale(
         user: widget.user.username,
         clientName: selectedClient?.name,
@@ -311,7 +309,7 @@ class _CashierScreenState extends State<CashierScreen> {
       lastLogout: now,
     );
 
-    final userDb = UserDBHelper();
+    final userDb = AppDatabaseHelper();
     await userDb.updateUser(updatedUser);
 
     Navigator.pushReplacementNamed(context, '/login');

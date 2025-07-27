@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../db/user_db_helper.dart';
+import '../db/app_db_helper.dart';
 import 'create_admin_screen.dart';
 import 'login_screen.dart';
 
@@ -11,7 +11,7 @@ class InitialScreen extends StatefulWidget {
 }
 
 class _InitialScreenState extends State<InitialScreen> {
-  final userDb = UserDBHelper();
+  final userDb = AppDatabaseHelper();
 
   @override
   void initState() {
