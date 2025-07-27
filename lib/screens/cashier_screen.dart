@@ -133,7 +133,7 @@ class _CashierScreenState extends State<CashierScreen> {
             else
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text("Client sélectionné : \${selectedClient!.name}", style: const TextStyle(fontWeight: FontWeight.w500)),
+                child: Text("Client sélectionné : ${selectedClient!.name}", style: const TextStyle(fontWeight: FontWeight.w500)),
               ),
             const SizedBox(height: 20),
             const Text("Produits ajoutés :", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -217,7 +217,7 @@ class _CashierScreenState extends State<CashierScreen> {
       if (product.quantity < quantityVendue) {
         success = false;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Stock insuffisant pour \${product.name}")),
+          SnackBar(content: Text("Stock insuffisant pour ${product.name}")),
         );
         break;
       }
@@ -272,7 +272,7 @@ class _CashierScreenState extends State<CashierScreen> {
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Ajouter \${product.name}"),
+        title: Text("Ajouter ${product.name}"),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(labelText: "Quantité"),
