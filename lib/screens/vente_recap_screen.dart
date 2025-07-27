@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import '../models/user_model.dart';
+import 'package:share_plus/share_plus.dart';
+
 
 class VenteRecapScreen extends StatelessWidget {
   final UserModel user;
@@ -57,15 +59,50 @@ class VenteRecapScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
             Center(
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.done),
-                label: const Text("Retour"),
-                onPressed: () => Navigator.pop(context),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.done),
+                    label: const Text("Retour"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  const SizedBox(width: 16), // espacement entre les boutons
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.share),
+                    label: const Text("Partager"),
+                    onPressed: () => partagerVente(context),
+                  ),
+                ],
               ),
             )
+
           ],
         ),
       ),
     );
   }
+
+
+  void partagerVente(BuildContext context) {
+    final StringBuffer buffer = StringBuffer();
+    buffer.writeln("🧾 Fiche de vente");
+    buffer.writeln("Employé : ${user.username}");
+    buffer.writeln("Date : ${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}");
+    if (clientName!.isNotEmpty) {
+      buffer.writeln("Client : $clientName");
+    }
+    buffer.writeln("\n📦 Produits :");
+
+    for (var item in venteItems) {
+      final product = item['product'] as ProductModel;
+      final qty = item['qty'] as int;
+      buffer.writeln("- ${product.name} x$qty : ${(product.price * qty).toStringAsFixed(2)} FCFA");
+    }
+
+    buffer.writeln("\n💰 TOTAL : ${total.toStringAsFixed(2)} FCFA");
+
+    Share.share(buffer.toString());
+  }
+
 }
