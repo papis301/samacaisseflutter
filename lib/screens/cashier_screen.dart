@@ -20,7 +20,7 @@ class _CashierScreenState extends State<CashierScreen> {
   String searchText = '';
   String? selectedClientId;
   List<ProductModel> products = [];
-  Map<int, int> panier = {}; // productId -> quantity
+  Map<int, double> panier = {}; // productId -> quantity
   ClientModel? selectedClient;
   List<ClientModel> clients = [];
 
@@ -141,7 +141,7 @@ class _CashierScreenState extends State<CashierScreen> {
                 children: panier.entries.map((entry) {
                   final product = products.firstWhere((p) => p.id == entry.key);
                   final qty = entry.value;
-                  final controller = TextEditingController(text: qty.toString());
+                  final controller = TextEditingController(text: qty.toStringAsFixed(2));
 
                   return ListTile(
                     title: Text(product.name),
@@ -161,14 +161,17 @@ class _CashierScreenState extends State<CashierScreen> {
                                 contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               ),
                               onSubmitted: (val) {
-                                final newQty = int.tryParse(val) ?? qty;
-                                setState(() {
-                                  if (newQty <= 0) {
+                                final parsed = double.tryParse(val.replaceAll(',', '.'));
+                                if (parsed != null && parsed > 0) {
+                                  setState(() {
+                                    panier[product.id!] = parsed;
+                                  });
+                                } else {
+                                  setState(() {
                                     panier.remove(product.id);
-                                  } else {
-                                    panier[product.id!] = newQty;
-                                  }
-                                });
+                                  });
+                                }
+
                               },
                             ),
                           ),
@@ -280,7 +283,7 @@ class _CashierScreenState extends State<CashierScreen> {
           TextButton(onPressed: () => Navigator.pop(context), child: const Text("Annuler")),
           ElevatedButton(
             onPressed: () {
-              final qty = int.tryParse(controller.text) ?? 1;
+              final qty = double.tryParse(controller.text) ?? 1;
               setState(() {
                 panier.update(product.id!, (old) => old + qty, ifAbsent: () => qty);
               });

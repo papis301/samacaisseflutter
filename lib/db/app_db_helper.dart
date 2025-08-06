@@ -52,7 +52,7 @@ class AppDatabaseHelper {
       CREATE TABLE products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        quantity INTEGER,
+        quantity DOUBLE,
         price REAL,
         date TEXT
       )
@@ -73,7 +73,7 @@ class AppDatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         sale_id INTEGER,
         product_name TEXT,
-        quantity INTEGER,
+        quantity DOUBLE,
         price REAL
       )
     ''');
@@ -164,7 +164,7 @@ class AppDatabaseHelper {
 
     for (var item in items) {
       final product = item['product'] as ProductModel;
-      final qty = item['qty'] as int;
+      final qty = item['qty'] as double;
       await db.insert('sale_items', {
         'sale_id': saleId,
         'product_name': product.name,

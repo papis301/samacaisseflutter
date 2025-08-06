@@ -1,7 +1,7 @@
 class ProductModel {
   final int? id;
   final String name;
-  final int quantity;
+  final double quantity;
   final double price;
   final String date;
 

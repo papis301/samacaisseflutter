@@ -29,7 +29,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   void saveProduct() async {
     final name = nameController.text.trim();
-    final quantity = int.tryParse(quantityController.text) ?? 0;
+    final quantity = double.tryParse(quantityController.text) ?? 0;
     final price = double.tryParse(priceController.text) ?? 0.0;
     final date = DateTime.now().toIso8601String();
 
