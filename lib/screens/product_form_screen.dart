@@ -16,6 +16,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final quantityController = TextEditingController();
   final priceController = TextEditingController();
   final db = AppDatabaseHelper();
+  String selectedUnit = 'unité'; // Valeur par défaut
+  final List<String> units = ['unité', 'kg', 'L', 'm', 'paquet'];
 
   @override
   void initState() {
@@ -38,8 +40,11 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       name: name,
       quantity: quantity,
       price: price,
+      unit: selectedUnit,
       date: widget.product?.date ?? date,
     );
+
+
 
     if (widget.product == null) {
       await db.insertProduct(product);
@@ -65,12 +70,27 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             TextField(
               controller: quantityController,
               decoration: const InputDecoration(labelText: "Quantité"),
-              keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
             ),
             TextField(
               controller: priceController,
               decoration: const InputDecoration(labelText: "Prix"),
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            ),
+            DropdownButtonFormField<String>(
+              value: selectedUnit,
+              decoration: const InputDecoration(labelText: "Unité de mesure"),
+              items: units.map((unit) {
+                return DropdownMenuItem(
+                  value: unit,
+                  child: Text(unit),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedUnit = value!;
+                });
+              },
             ),
             const SizedBox(height: 20),
             ElevatedButton(

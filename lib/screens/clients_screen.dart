@@ -52,6 +52,10 @@ class _ClientListScreenState extends State<ClientListScreen> {
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green, // couleur du bouton
+              foregroundColor: Colors.white, // couleur du texte
+            ),
             child: const Text("Enregistrer"),
             onPressed: () async {
               final name = nameController.text.trim();
@@ -80,8 +84,14 @@ class _ClientListScreenState extends State<ClientListScreen> {
         title: const Text("Supprimer ce client ?"),
         content: Text("Voulez-vous vraiment supprimer ${client.name} ?"),
         actions: [
-          TextButton(child: const Text("Annuler"), onPressed: () => Navigator.pop(context, false)),
-          ElevatedButton(child: const Text("Supprimer"), onPressed: () => Navigator.pop(context, true)),
+          TextButton(child: const Text("Annuler"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green, // couleur du bouton
+            foregroundColor: Colors.white, // couleur du texte
+          ), onPressed: () => Navigator.pop(context, false)),
+          ElevatedButton(child: const Text("Supprimer"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green, // couleur du bouton
+            foregroundColor: Colors.white, // couleur du texte
+          ), onPressed: () => Navigator.pop(context, true)),
         ],
       ),
     );

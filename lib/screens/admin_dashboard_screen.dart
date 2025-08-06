@@ -55,6 +55,10 @@ class AdminDashboardScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // couleur du bouton
+                  foregroundColor: Colors.white, // couleur du texte
+                ),
                 icon: const Icon(Icons.people),
                 label: const Text("Gestion des utilisateurs"),
                 onPressed: () {
@@ -66,6 +70,10 @@ class AdminDashboardScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // couleur du bouton
+                  foregroundColor: Colors.white, // couleur du texte
+                ),
                 icon: const Icon(Icons.inventory),
                 label: const Text("Gestion des produits"),
                 onPressed: () {
@@ -85,6 +93,10 @@ class AdminDashboardScreen extends StatelessWidget {
                 },
               ),
               ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // couleur du bouton
+                  foregroundColor: Colors.white, // couleur du texte
+                ),
                 icon: const Icon(Icons.history),
                 label: const Text("Historique des ventes"),
                 onPressed: () {
@@ -95,6 +107,10 @@ class AdminDashboardScreen extends StatelessWidget {
                 },
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // couleur du bouton
+                  foregroundColor: Colors.white, // couleur du texte
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,

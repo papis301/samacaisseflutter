@@ -54,7 +54,8 @@ class AppDatabaseHelper {
         name TEXT,
         quantity DOUBLE,
         price REAL,
-        date TEXT
+        date TEXT,
+        unit TEXT
       )
     ''');
 

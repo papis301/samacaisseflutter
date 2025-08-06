@@ -4,6 +4,7 @@ class ProductModel {
   final double quantity;
   final double price;
   final String date;
+  final String unit;
 
   ProductModel({
     this.id,
@@ -11,6 +12,7 @@ class ProductModel {
     required this.quantity,
     required this.price,
     required this.date,
+    required this.unit,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class ProductModel {
       'quantity': quantity,
       'price': price,
       'date': date,
+      'unit': unit,
     };
   }
 
@@ -30,6 +33,7 @@ class ProductModel {
       quantity: map['quantity'],
       price: map['price'],
       date: map['date'],
+      unit: map['unit'],
     );
   }
 }

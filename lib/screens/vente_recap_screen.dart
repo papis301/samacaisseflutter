@@ -44,7 +44,7 @@ class VenteRecapScreen extends StatelessWidget {
                 itemBuilder: (_, index) {
                   final item = venteItems[index];
                   final product = item['product'] as ProductModel;
-                  final qty = item['qty'] as int;
+                  final qty = item['qty'] as double;
 
                   return ListTile(
                     title: Text(product.name),
@@ -63,12 +63,20 @@ class VenteRecapScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green, // couleur du bouton
+                      foregroundColor: Colors.white, // couleur du texte
+                    ),
                     icon: const Icon(Icons.done),
                     label: const Text("Retour"),
                     onPressed: () => Navigator.pop(context),
                   ),
                   const SizedBox(width: 16), // espacement entre les boutons
                   ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green, // couleur du bouton
+                      foregroundColor: Colors.white, // couleur du texte
+                    ),
                     icon: const Icon(Icons.share),
                     label: const Text("Partager"),
                     onPressed: () => partagerVente(context),
@@ -96,7 +104,7 @@ class VenteRecapScreen extends StatelessWidget {
 
     for (var item in venteItems) {
       final product = item['product'] as ProductModel;
-      final qty = item['qty'] as int;
+      final qty = item['qty'] as double;
       buffer.writeln("- ${product.name} x$qty : ${(product.price * qty).toStringAsFixed(2)} FCFA");
     }
 

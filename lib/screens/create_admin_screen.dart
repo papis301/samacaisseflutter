@@ -64,6 +64,10 @@ class _CreateAdminScreenState extends State<CreateAdminScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // couleur du bouton
+                foregroundColor: Colors.white, // couleur du texte
+              ),
               onPressed: createAdmin,
               child: const Text("Créer l'admin"),
             )

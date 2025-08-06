@@ -71,7 +71,10 @@ class _UserFormScreenState extends State<UserFormScreen> {
               }).toList(),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: saveUser, child: const Text("Enregistrer")),
+            ElevatedButton(style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green, // couleur du bouton
+              foregroundColor: Colors.white, // couleur du texte
+            ),onPressed: saveUser, child: const Text("Enregistrer")),
           ],
         ),
       ),

@@ -69,6 +69,10 @@ class _CashierScreenState extends State<CashierScreen> {
             title: Text(p.name),
             subtitle: Text("Prix: ${p.price.toStringAsFixed(2)} FCFA • Stock: ${p.quantity}"),
             trailing: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // couleur du bouton
+                foregroundColor: Colors.white, // couleur du texte
+              ),
               child: const Text("Ajouter"),
               onPressed: () => addToCart(p),
             ),
@@ -88,6 +92,10 @@ class _CashierScreenState extends State<CashierScreen> {
             Text("Total : ${total.toStringAsFixed(2)} FCFA", style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 16),
             ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // couleur du bouton
+                foregroundColor: Colors.white, // couleur du texte
+              ),
               icon: const Icon(Icons.check),
               label: const Text("Valider"),
               onPressed: panier.isNotEmpty ? validerVente : null,
@@ -154,7 +162,7 @@ class _CashierScreenState extends State<CashierScreen> {
                           Expanded(
                             child: TextField(
                               controller: controller,
-                              keyboardType: TextInputType.number,
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
                               decoration: const InputDecoration(
                                 hintText: "Qté",
                                 border: OutlineInputBorder(),
@@ -231,6 +239,7 @@ class _CashierScreenState extends State<CashierScreen> {
         quantity: product.quantity - quantityVendue,
         price: product.price,
         date: product.date,
+        unit: product.unit,
       );
       await db.updateProduct(updatedProduct);
     }
@@ -277,11 +286,15 @@ class _CashierScreenState extends State<CashierScreen> {
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(labelText: "Quantité"),
-          keyboardType: TextInputType.number,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text("Annuler")),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green, // couleur du bouton
+              foregroundColor: Colors.white, // couleur du texte
+            ),
             onPressed: () {
               final qty = double.tryParse(controller.text) ?? 1;
               setState(() {
@@ -326,11 +339,19 @@ class _CashierScreenState extends State<CashierScreen> {
         title: const Text("Caisse"),
         actions: [
           IconButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green, // couleur du bouton
+              foregroundColor: Colors.white, // couleur du texte
+            ),
             icon: const Icon(Icons.clear_all),
             tooltip: "Vider le panier",
             onPressed: panier.isNotEmpty ? clearCart : null,
           ),
           IconButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green, // couleur du bouton
+              foregroundColor: Colors.white, // couleur du texte
+            ),
             icon: const Icon(Icons.logout),
             tooltip: "Déconnexion",
             onPressed: logout,
